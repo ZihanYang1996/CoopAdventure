@@ -21,6 +21,12 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
+	UFUNCTION(BlueprintCallable)
+	void CreaterServer(FString ServerName);
+
+	UFUNCTION(BlueprintCallable)
+	void FindServer(FString ServerName);
+
 private:
 	IOnlineSubsystem* OnlineSubsystem;
 	IOnlineSessionPtr SessionInterface;
