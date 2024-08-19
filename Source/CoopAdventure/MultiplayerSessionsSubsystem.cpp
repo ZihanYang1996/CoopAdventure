@@ -3,6 +3,7 @@
 
 #include "MultiplayerSessionsSubsystem.h"
 
+
 void printString(const FString& str)
 {
 	if (GEngine)
@@ -10,14 +11,37 @@ void printString(const FString& str)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, str);
 	}
 }
+
 UMultiplayerSessionsSubsystem::UMultiplayerSessionsSubsystem()
 {
-	printString("MSS Constructor");
+	// printString("MSS Constructor");
 }
 
 void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
-	printString("MSS Initialize");
+	// printString("MSS Initialize");
+	OnlineSubsystem = IOnlineSubsystem::Get();
+	if (OnlineSubsystem)
+	{
+		FString SubsystemName = OnlineSubsystem->GetSubsystemName().ToString();
+		printString("OnlineSubsystem found: " + SubsystemName);
+
+		// Get session interface
+		SessionInterface = OnlineSubsystem->GetSessionInterface();
+
+		if (SessionInterface.IsValid())
+		{
+			printString("Session interface is valid!");
+		}
+		else
+		{
+			printString("Session interface is NOT valid!");
+		}
+	}
+	else
+	{
+		printString("OnlineSubsystem not found");
+	}
 }
 
 void UMultiplayerSessionsSubsystem::Deinitialize()
