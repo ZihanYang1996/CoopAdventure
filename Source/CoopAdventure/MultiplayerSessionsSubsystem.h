@@ -22,7 +22,7 @@ public:
 	virtual void Deinitialize() override;
 
 	UFUNCTION(BlueprintCallable)
-	void CreaterServer(FString ServerName);
+	void CreateServer(FString ServerName);
 
 	UFUNCTION(BlueprintCallable)
 	void FindServer(FString ServerName);
@@ -30,4 +30,6 @@ public:
 private:
 	IOnlineSubsystem* OnlineSubsystem;
 	IOnlineSessionPtr SessionInterface;
+
+	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
 };
