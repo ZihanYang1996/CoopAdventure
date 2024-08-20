@@ -18,6 +18,7 @@ void printString(const FString& str)
 UMultiplayerSessionsSubsystem::UMultiplayerSessionsSubsystem()
 {
 	// printString("MSS Constructor");
+	bCreateServerAfterDestroy = false;
 }
 
 void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -35,6 +36,7 @@ void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collect
 		if (SessionInterface.IsValid())
 		{
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UMultiplayerSessionsSubsystem::OnCreateSessionComplete);
+			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UMultiplayerSessionsSubsystem::OnDestroySessionComplete);
 		}
 		else
 		{
@@ -55,6 +57,17 @@ void UMultiplayerSessionsSubsystem::Deinitialize()
 void UMultiplayerSessionsSubsystem::CreateServer(FString ServerName)
 {
 	printString("Create Server: " + ServerName);
+
+	// Check if the session with the same name already exists
+	FNamedOnlineSession* ExisitingSession = SessionInterface->GetNamedSession(FName(*ServerName));
+
+	if (ExisitingSession)
+	{
+		printString("Session with the same name already exists! Destroying it...");
+		bCreateServerAfterDestroy = true;
+		SessionInterface->DestroySession(FName(*ServerName));
+		return;
+	}
 
 	if (ServerName.IsEmpty())
 	{
@@ -89,5 +102,23 @@ void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, b
 	else
 	{
 		printString("Session creation failed!");
+	}
+}
+
+void UMultiplayerSessionsSubsystem::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
+{
+	if (bWasSuccessful)
+	{
+		printString(FString::Printf(TEXT("Exising session (%s) destroyed! Creating a new one..."), *SessionName.ToString()));
+	}
+	else
+	{
+		printString("Session destruction failed!");
+	}
+
+	if (bCreateServerAfterDestroy)
+	{
+		CreateServer(SessionName.ToString());
+		bCreateServerAfterDestroy = false;
 	}
 }
