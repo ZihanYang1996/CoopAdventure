@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "OnlineSessionSettings.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "OnlineSubsystem.h"
 #include "MultiplayerSessionsSubsystem.generated.h"
@@ -33,6 +34,11 @@ private:
 
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnFindSessionsComplete(bool bWasSuccessful);
 
 	bool bCreateServerAfterDestroy = false;
+
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
+	FString ServerNameToFInd;
 };
