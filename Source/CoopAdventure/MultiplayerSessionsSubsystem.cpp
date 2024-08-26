@@ -188,7 +188,10 @@ void UMultiplayerSessionsSubsystem::OnFindSessionsComplete(bool bWasSuccessful)
 			{
 				printString("Correct session found! Joining...");
 				SessionInterface->JoinSession(0, FName(*ServerNameToFInd), *CorrectResult);
-				return;
+			}
+			else
+			{
+				printString("However, the session you are looking for is not found!");
 			}
 			return;
 		}
