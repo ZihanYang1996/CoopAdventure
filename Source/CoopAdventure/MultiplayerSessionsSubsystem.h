@@ -9,6 +9,8 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include "MultiplayerSessionsSubsystem.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FServerCreatedDelegate, bool, bWasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FServerFindDelegate, bool, bWasSuccessful);
 /**
  * 
  */
@@ -28,6 +30,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void FindServer(FString ServerName);
+
+	UPROPERTY(BlueprintAssignable)
+	FServerCreatedDelegate OnServerCreated;
+
+	UPROPERTY(BlueprintAssignable)
+	FServerFindDelegate OnServerFind;
 
 private:
 	IOnlineSubsystem* OnlineSubsystem;
