@@ -27,6 +27,8 @@ APressurePlate::APressurePlate()
 		TriggerMesh->SetStaticMesh(TriggerMeshAsset.Object);
 		TriggerMesh->SetRelativeScale3D(FVector(3.3f, 3.3f, 0.2f));
 		TriggerMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 10.0f));
+		// Make the trigger mesh overlap with other actors
+		TriggerMesh->SetCollisionProfileName(FName("OverlapAll"));
 	}
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -50,12 +52,44 @@ void APressurePlate::BeginPlay()
 
 	// Make the trigger mesh invisible when the game starts
 	TriggerMesh->SetVisibility(false);
-	// Make the trigger mesh overlap with other actors
-	TriggerMesh->SetCollisionProfileName(FName("OverlapAll"));
 }
 
 // Called every frame
 void APressurePlate::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (HasAuthority())
+	{
+		TArray<AActor*> OverlappingActors;
+		AActor* TriggerActor = nullptr;
+		
+		TriggerMesh->GetOverlappingActors(OverlappingActors);
+
+		for (AActor* Actor : OverlappingActors)
+		{
+			if (Actor->ActorHasTag("Player"))
+			{
+				TriggerActor = Actor;
+				break;
+			}
+		}
+
+		if (TriggerActor)
+		{
+			if (!bIsActivated)
+			{
+				bIsActivated = true;
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Pressure plate activated!"));
+			}
+		}
+		else
+		{
+			if (bIsActivated)
+			{
+				bIsActivated = false;
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Pressure plate Deactivated!"));
+			}
+		}
+	}
 }
