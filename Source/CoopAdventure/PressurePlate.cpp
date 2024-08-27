@@ -81,6 +81,7 @@ void APressurePlate::Tick(float DeltaTime)
 			{
 				bIsActivated = true;
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Pressure plate activated!"));
+				OnActivated.Broadcast();
 			}
 		}
 		else
@@ -89,6 +90,7 @@ void APressurePlate::Tick(float DeltaTime)
 			{
 				bIsActivated = false;
 				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Pressure plate Deactivated!"));
+				OnDeactivated.Broadcast();
 			}
 		}
 	}

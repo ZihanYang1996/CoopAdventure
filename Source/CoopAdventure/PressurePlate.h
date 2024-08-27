@@ -6,12 +6,16 @@
 #include "GameFramework/Actor.h"
 #include "PressurePlate.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPressurePlateOnActivated);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPressurePlateOnDeactivated);
+
 UCLASS()
 class COOPADVENTURE_API APressurePlate : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APressurePlate();
 
@@ -19,7 +23,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -35,4 +39,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsActivated = false;
 
+	UPROPERTY(BlueprintAssignable)
+	FPressurePlateOnActivated OnActivated;
+
+	UPROPERTY(BlueprintAssignable)
+	FPressurePlateOnDeactivated OnDeactivated;
 };
