@@ -37,6 +37,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FServerFindDelegate OnServerFind;
 
+	UPROPERTY(BlueprintReadWrite)
+	FString GameMapPath;
+
 private:
 	IOnlineSubsystem* OnlineSubsystem;
 	IOnlineSessionPtr SessionInterface;
