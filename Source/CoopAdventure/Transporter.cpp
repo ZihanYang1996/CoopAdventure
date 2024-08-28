@@ -3,6 +3,8 @@
 
 #include "Transporter.h"
 
+#include "PressurePlate.h"
+
 // Sets default values for this component's properties
 UTransporter::UTransporter() :
 	StartPoint(FVector::Zero()),
@@ -25,7 +27,14 @@ void UTransporter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	for (AActor* TriggerActor : TriggerActors)
+	{
+		if (APressurePlate* PressurePlate = Cast<APressurePlate>(TriggerActor))
+		{
+			PressurePlate->OnActivated.AddDynamic(this, &UTransporter::OnTriggerActivated);
+			PressurePlate->OnDeactivated.AddDynamic(this, &UTransporter::OnTriggerDeactivated);
+		}
+	}
 }
 
 
@@ -34,7 +43,10 @@ void UTransporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (ActivatedTriggerCount > 0)
+	{
+		bAreAllTriggerActorsActivated = ActivatedTriggerCount == TriggerActors.Num();
+	}
 }
 
 
@@ -45,8 +57,22 @@ void UTransporter::SetPoints(const FVector& Start, const FVector& End)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Start and End points are the same!");
 		return;
 	}
-	
+
 	StartPoint = Start;
 	EndPoint = End;
 	bArePointsSet = true;
+}
+
+void UTransporter::OnTriggerActivated()
+{
+	ActivatedTriggerCount++;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+	                                 FString::Printf(TEXT("ActivatedTriggerCount: %d"), ActivatedTriggerCount));
+}
+
+void UTransporter::OnTriggerDeactivated()
+{
+	ActivatedTriggerCount--;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+	                                 FString::Printf(TEXT("ActivatedTriggerCount: %d"), ActivatedTriggerCount));
 }

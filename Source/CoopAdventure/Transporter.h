@@ -43,5 +43,12 @@ public:
 
 	UFUNCTION()
 	void SetPoints(const FVector& Start, const FVector& End);
+
+private:
+	UFUNCTION()
+	void OnTriggerActivated();
+
+	UFUNCTION()
+	void OnTriggerDeactivated();
 		
 };
