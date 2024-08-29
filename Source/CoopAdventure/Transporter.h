@@ -7,12 +7,12 @@
 #include "Transporter.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class COOPADVENTURE_API UTransporter : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UTransporter();
 
@@ -20,9 +20,10 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	FVector StartPoint;
 	FVector EndPoint;
@@ -41,7 +42,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bAreAllTriggerActorsActivated;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetPoints(const FVector& Start, const FVector& End);
 
 private:
@@ -50,5 +51,4 @@ private:
 
 	UFUNCTION()
 	void OnTriggerDeactivated();
-		
 };
