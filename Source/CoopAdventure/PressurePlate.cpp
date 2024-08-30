@@ -68,7 +68,7 @@ void APressurePlate::Tick(float DeltaTime)
 
 		for (AActor* Actor : OverlappingActors)
 		{
-			if (Actor->ActorHasTag("Player"))
+			if (Actor->ActorHasTag("Player") || Actor->ActorHasTag("TriggerActor"))
 			{
 				TriggerActor = Actor;
 				break;
