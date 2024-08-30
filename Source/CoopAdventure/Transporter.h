@@ -45,6 +45,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPoints(const FVector& Start, const FVector& End);
 
+	UPROPERTY(EditAnywhere)
+	bool bIsOwnerTriggerActor = false;
+
 private:
 	UFUNCTION()
 	void OnTriggerActivated();

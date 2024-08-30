@@ -3,6 +3,8 @@
 
 #include "PressurePlate.h"
 
+#include "Transporter.h"
+
 // Sets default values
 APressurePlate::APressurePlate()
 {
@@ -43,6 +45,10 @@ APressurePlate::APressurePlate()
 		Mesh->SetRelativeScale3D(FVector(4.0f, 4.0f, 0.5f));
 		Mesh->SetRelativeLocation(FVector(0.0f, 0.0f, 7.2f));
 	}
+
+	Transporter = CreateDefaultSubobject<UTransporter>(TEXT("Transporter"));
+	Transporter->MoveTime = 0.25f;
+	Transporter->bIsOwnerTriggerActor = true;
 }
 
 // Called when the game starts or when spawned
@@ -52,6 +58,9 @@ void APressurePlate::BeginPlay()
 
 	// Make the trigger mesh invisible when the game starts
 	TriggerMesh->SetVisibility(false);
+
+	Transporter->SetPoints(GetActorLocation(), GetActorLocation() + FVector(0.0f, 0.0f, -10.0f));
+	
 }
 
 // Called every frame
