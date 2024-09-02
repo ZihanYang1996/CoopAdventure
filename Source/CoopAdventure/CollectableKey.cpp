@@ -71,7 +71,7 @@ void ACollectableKey::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, A
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Key Overlapped"));
 	// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, OtherActor->GetName());
-	if (HasAuthority() && OtherActor->IsA(ACoopAdventureCharacter::StaticClass()))
+	if (HasAuthority() && OtherActor->IsA(ACoopAdventureCharacter::StaticClass()) && !bIsCollected)
 	{
 		bIsCollected = true;
 		// Call the OnRep function manually because the OnRep function is not called when the variable is changed on the server
