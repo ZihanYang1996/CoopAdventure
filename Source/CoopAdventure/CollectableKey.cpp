@@ -3,6 +3,7 @@
 
 #include "CollectableKey.h"
 
+#include "CoopAdventureCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetwork.h"
 
@@ -24,6 +25,8 @@ ACollectableKey::ACollectableKey()
 	Capsule->SetCollisionProfileName(FName("OverlapAllDynamic"));
 	Capsule->SetCapsuleHalfHeight(150.0f);
 	Capsule->SetCapsuleRadius(50.0f);
+	// Bind the OnOverlapBegin function to the OnComponentBeginOverlap event
+	Capsule->OnComponentBeginOverlap.AddDynamic(this, &ACollectableKey::OnOverlapBegin);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
@@ -52,6 +55,27 @@ void ACollectableKey::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 
 void ACollectableKey::OnRep_IsCollected()
 {
-	
+	if (HasAuthority())
+	{
+		UE_LOG(LogTemp, Display, TEXT("Key collected on server"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("Key collected on client"));
+	}
+	Mesh->SetVisibility(!bIsCollected);
+}
+
+void ACollectableKey::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+									 int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Key Overlapped"));
+	// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, OtherActor->GetName());
+	if (HasAuthority() && OtherActor->IsA(ACoopAdventureCharacter::StaticClass()))
+	{
+		bIsCollected = true;
+		// Call the OnRep function manually because the OnRep function is not called when the variable is changed on the server
+		OnRep_IsCollected();
+	}
 }
 
