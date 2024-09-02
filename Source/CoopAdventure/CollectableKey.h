@@ -42,6 +42,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float RotationSpeed = 100.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UAudioComponent* AudioComponent;
+
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

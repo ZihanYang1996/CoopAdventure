@@ -4,6 +4,7 @@
 #include "CollectableKey.h"
 
 #include "CoopAdventureCharacter.h"
+#include "Components/AudioComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetwork.h"
 
@@ -32,6 +33,10 @@ ACollectableKey::ACollectableKey()
 	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetIsReplicated(true);
 	Mesh->SetCollisionProfileName(FName("OverlapAllDynamic"));
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->SetAutoActivate(false);
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +49,8 @@ void ACollectableKey::BeginPlay()
 void ACollectableKey::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	Mesh->AddRelativeRotation(FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f));
 }
 
 void ACollectableKey::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -64,6 +71,7 @@ void ACollectableKey::OnRep_IsCollected()
 		UE_LOG(LogTemp, Display, TEXT("Key collected on client"));
 	}
 	Mesh->SetVisibility(!bIsCollected);
+	AudioComponent->Play();
 }
 
 void ACollectableKey::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
