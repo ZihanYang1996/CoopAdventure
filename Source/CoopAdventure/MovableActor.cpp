@@ -5,6 +5,7 @@
 
 #include "Transporter.h"
 #include "Components/ArrowComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AMovableActor::AMovableActor()
@@ -31,6 +32,8 @@ AMovableActor::AMovableActor()
 	Point2->SetRelativeLocation(FVector(0.0f, 0.0f, 100.0f));
 
 	Transporter = CreateDefaultSubobject<UTransporter>("TransporterComponent");
+
+	UBoxComponent* CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
 
 }
 
