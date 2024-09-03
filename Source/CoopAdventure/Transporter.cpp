@@ -3,6 +3,7 @@
 
 #include "Transporter.h"
 
+#include "CollectableKey.h"
 #include "PressurePlate.h"
 
 // Sets default values for this component's properties
@@ -37,6 +38,12 @@ void UTransporter::BeginPlay()
 		{
 			PressurePlate->OnActivated.AddDynamic(this, &UTransporter::OnTriggerActivated);
 			PressurePlate->OnDeactivated.AddDynamic(this, &UTransporter::OnTriggerDeactivated);
+			continue;
+		}
+
+		if (ACollectableKey* CollectableKey = Cast<ACollectableKey>(TriggerActor))
+		{
+			CollectableKey->OnCollected.AddDynamic(this, &UTransporter::OnTriggerActivated);
 		}
 	}
 }

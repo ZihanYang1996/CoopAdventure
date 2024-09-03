@@ -9,6 +9,8 @@
 class ACollectableKeyHolder;
 class UCapsuleComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCollectableKeyOnCollected);
+
 UCLASS()
 class COOPADVENTURE_API ACollectableKey : public AActor
 {
@@ -51,6 +53,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ACollectableKeyHolder* KeyHolder;
+
+	FCollectableKeyOnCollected OnCollected;
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
