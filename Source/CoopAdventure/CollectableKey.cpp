@@ -3,6 +3,7 @@
 
 #include "CollectableKey.h"
 
+#include "CollectableKeyHolder.h"
 #include "CoopAdventureCharacter.h"
 #include "Components/AudioComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -72,6 +73,11 @@ void ACollectableKey::OnRep_IsCollected()
 	}
 	Mesh->SetVisibility(!bIsCollected);
 	AudioComponent->Play();
+
+	if (KeyHolder && bIsCollected)
+	{
+		KeyHolder->ActivateKeyMesh();
+	}
 }
 
 void ACollectableKey::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CollectableKey.generated.h"
 
+class ACollectableKeyHolder;
 class UCapsuleComponent;
 
 UCLASS()
@@ -47,6 +48,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UAudioComponent* AudioComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ACollectableKeyHolder* KeyHolder;
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
