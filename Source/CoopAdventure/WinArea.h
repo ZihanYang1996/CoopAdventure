@@ -8,6 +8,7 @@
 
 class UBoxComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWinConditionMet);
 UCLASS()
 class COOPADVENTURE_API AWinArea : public AActor
 {
@@ -30,4 +31,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsWinConditionMet = false;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCWinConditionMet();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnWinConditionMet OnWinConditionMet;
 };

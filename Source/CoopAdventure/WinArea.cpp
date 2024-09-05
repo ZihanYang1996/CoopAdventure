@@ -41,7 +41,13 @@ void AWinArea::Tick(float DeltaTime)
 			if (bIsWinConditionMet)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Win condition met"));
+				MulticastRPCWinConditionMet();
 			}
 		}
 	}
+}
+
+void AWinArea::MulticastRPCWinConditionMet_Implementation()
+{
+	OnWinConditionMet.Broadcast();
 }
